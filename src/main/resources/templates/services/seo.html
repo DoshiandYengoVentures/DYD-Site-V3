@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title th:text="${pageTitle}">SEO</title>
+  <meta name="description" content="Local and technical SEO that helps you rank for the searches that actually bring customers." />
+  <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css" />
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <p class="breadcrumb"><a href="/">Home</a> / <a href="/#services">Services</a> / SEO</p>
+      <span class="eyebrow">FIG. 02.4 — SEO SPEC</span>
+      <h1>Rank for the searches that bring customers in</h1>
+      <p>SEO isn't a trick — it's making sure search engines and customers can actually find, trust, and understand your business. We focus on the fundamentals that move rankings and revenue.</p>
+      <div class="cta-row" style="margin-top:28px;">
+        <a class="btn btn-primary" href="/contact">Get a Free Quote</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="included">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">FIG. 02.4A — WHAT'S INCLUDED</span>
+        <h2 class="section-title">What our SEO work covers</h2>
+      </div>
+
+      <div class="included-grid">
+        <div class="included-item">
+          <span class="spec-num">01</span>
+          <div>
+            <h3>Keyword &amp; Competitor Research</h3>
+            <p>We find out exactly what your customers search for and how competitors currently rank.</p>
+          </div>
+        </div>
+        <div class="included-item">
+          <span class="spec-num">02</span>
+          <div>
+            <h3>On-Page Optimization</h3>
+            <p>Titles, headings, and content structured around the terms that matter.</p>
+          </div>
+        </div>
+        <div class="included-item">
+          <span class="spec-num">03</span>
+          <div>
+            <h3>Local Listings &amp; Google Business Profile</h3>
+            <p>Accurate, optimized listings so you show up in local map results.</p>
+          </div>
+        </div>
+        <div class="included-item">
+          <span class="spec-num">04</span>
+          <div>
+            <h3>Technical SEO Audit</h3>
+            <p>We fix the behind-the-scenes issues — speed, indexing, broken links — that hold rankings back.</p>
+          </div>
+        </div>
+        <div class="included-item">
+          <span class="spec-num">05</span>
+          <div>
+            <h3>Content Strategy</h3>
+            <p>A plan for the pages and posts that will earn long-term organic traffic.</p>
+          </div>
+        </div>
+        <div class="included-item">
+          <span class="spec-num">06</span>
+          <div>
+            <h3>Monthly Reporting</h3>
+            <p>Plain-language reports on rankings, traffic, and what we're doing next.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="process">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">FIG. 02.4B — PROCESS</span>
+        <h2 class="section-title">How an SEO engagement runs</h2>
+      </div>
+
+      <div class="spec-list">
+        <div class="spec-item">
+          <span class="spec-num">01</span>
+          <div><h3>Technical &amp; Competitive Audit</h3><p>We assess your current site and where competitors are beating you.</p></div>
+        </div>
+        <div class="spec-item">
+          <span class="spec-num">02</span>
+          <div><h3>Keyword Strategy</h3><p>We prioritize the search terms with the best mix of volume and winnability.</p></div>
+        </div>
+        <div class="spec-item">
+          <span class="spec-num">03</span>
+          <div><h3>On-Page &amp; Technical Fixes</h3><p>We implement the structural and content changes identified in the audit.</p></div>
+        </div>
+        <div class="spec-item">
+          <span class="spec-num">04</span>
+          <div><h3>Content &amp; Local SEO Build-Out</h3><p>We publish targeted content and strengthen your local listings.</p></div>
+        </div>
+        <div class="spec-item">
+          <span class="spec-num">05</span>
+          <div><h3>Monitor &amp; Report</h3><p>We track rankings and traffic monthly and adjust the strategy as needed.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta">
+    <div class="container">
+      <h2>Ready to start ranking?</h2>
+      <div class="cta-row">
+        <a class="btn btn-accent" href="/contact">Get a Free Quote</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script th:src="@{/js/main.js}" src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title th:text="${pageTitle}">Portfolio</title>
+  <meta name="description" content="Example projects across website design, business automation, AI solutions, and SEO." />
+  <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css" />
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main>
+
+  <section class="page-hero">
+    <div class="container">
+      <p class="breadcrumb"><a href="/">Home</a> / Portfolio</p>
+      <span class="eyebrow">FIG. 09 — PORTFOLIO</span>
+      <h1>Selected &amp; example work</h1>
+      <p>A mix of client work and representative example projects across our four core services.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="notice">EXAMPLE / DEMO CONTENT — SHOWN FOR ILLUSTRATION, NOT LIVE CLIENT LINKS</div>
+
+      <div class="grid grid-3">
+        <article class="card">
+          <span class="card-tag">WEBSITE DESIGN</span>
+          <h3>Harbor &amp; Co. Contracting</h3>
+          <p>A quote-request focused rebuild for a residential contracting company, with a fast mobile-first layout.</p>
+          <span class="mono-label">Website Design, SEO</span>
+        </article>
+
+        <article class="card">
+          <span class="card-tag">AUTOMATION</span>
+          <h3>Riverstone Family Dental</h3>
+          <p>Automated intake forms and appointment reminders for a multi-provider dental practice.</p>
+          <span class="mono-label">Business Automation, Website Design</span>
+        </article>
+
+        <article class="card">
+          <span class="card-tag">AI SOLUTIONS</span>
+          <h3>Basin Street Kitchen</h3>
+          <p>An AI reservation and FAQ assistant embedded directly in the restaurant's existing site.</p>
+          <span class="mono-label">AI Solutions, Website Design</span>
+        </article>
+
+        <article class="card">
+          <span class="card-tag">SEO</span>
+          <h3>Coastline Realty Group</h3>
+          <p>A technical SEO overhaul and local listings cleanup for a multi-agent real estate office.</p>
+          <span class="mono-label">SEO, Website Design</span>
+        </article>
+
+        <article class="card">
+          <span class="card-tag">WEBSITE DESIGN</span>
+          <h3>Northside Fitness Studio</h3>
+          <p>A class-schedule-forward site redesign built to drive trial membership sign-ups.</p>
+          <span class="mono-label">Website Design</span>
+        </article>
+
+        <article class="card">
+          <span class="card-tag">AUTOMATION</span>
+          <h3>Evergreen Salon Collective</h3>
+          <p>Automated booking confirmations and review requests across three salon locations.</p>
+          <span class="mono-label">Business Automation, AI Solutions</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta">
+    <div class="container">
+      <h2>Have a project in mind?</h2>
+      <div class="cta-row">
+        <a class="btn btn-accent" href="/contact">Get a Free Quote</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script th:src="@{/js/main.js}" src="/js/main.js"></script>
+</body>
+</html>
