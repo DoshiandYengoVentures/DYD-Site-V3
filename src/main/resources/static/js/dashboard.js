@@ -34,4 +34,33 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("resize", function () {
     if (window.innerWidth > 900) closeSidebar();
   });
+
+  var requestModalOverlay = document.querySelector("[data-request-modal-overlay]");
+  var openRequestModalBtn = document.querySelector("[data-open-request-modal]");
+  var closeRequestModalEls = document.querySelectorAll("[data-close-request-modal]");
+
+  if (requestModalOverlay) {
+    var openRequestModal = function () {
+      requestModalOverlay.classList.add("is-open");
+    };
+    var closeRequestModal = function () {
+      requestModalOverlay.classList.remove("is-open");
+    };
+
+    if (openRequestModalBtn) {
+      openRequestModalBtn.addEventListener("click", openRequestModal);
+    }
+
+    closeRequestModalEls.forEach(function (el) {
+      el.addEventListener("click", closeRequestModal);
+    });
+
+    requestModalOverlay.addEventListener("click", function (event) {
+      if (event.target === requestModalOverlay) closeRequestModal();
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeRequestModal();
+    });
+  }
 });

@@ -26,6 +26,8 @@
   --db-warning-ink: #b45309;
   --db-danger-bg: #fef2f2;
   --db-danger-ink: #dc2626;
+  --db-slate-bg: #f1f5f9;
+  --db-slate-ink: #475569;
 
   --db-radius: 14px;
   --db-radius-sm: 10px;
@@ -437,6 +439,15 @@ body {
 .db-badge-progress { background: var(--db-blue-soft); color: var(--db-blue-ink); }
 .db-badge-attention { background: var(--db-warning-bg); color: var(--db-warning-ink); }
 
+.db-badge-priority-high { background: var(--db-danger-bg); color: var(--db-danger-ink); }
+.db-badge-priority-medium { background: var(--db-warning-bg); color: var(--db-warning-ink); }
+.db-badge-priority-low { background: var(--db-bg); color: var(--db-text-muted); border: 1px solid var(--db-border); }
+
+.db-badge-status-submitted { background: var(--db-slate-bg); color: var(--db-slate-ink); }
+.db-badge-status-progress { background: var(--db-blue-soft); color: var(--db-blue-ink); }
+.db-badge-status-waiting { background: var(--db-warning-bg); color: var(--db-warning-ink); }
+.db-badge-status-completed { background: var(--db-success-bg); color: var(--db-success-ink); }
+
 /* ---------- Panels (notifications / activity) ---------- */
 
 .db-panel {
@@ -528,6 +539,199 @@ body {
   font-size: 0.9rem;
   color: var(--db-text);
   line-height: 1.5;
+}
+
+/* ---------- Page head row (title + CTA) ---------- */
+
+.db-page-head-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.db-page-head-row p {
+  color: var(--db-text-muted);
+  font-size: 0.95rem;
+  margin-top: 6px;
+}
+
+/* ---------- Filter tabs ---------- */
+
+.db-filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.db-filter-tab {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: var(--db-radius-pill);
+  border: 1px solid var(--db-border);
+  background: var(--db-surface);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--db-text-muted);
+  transition: background-color var(--db-transition), border-color var(--db-transition), color var(--db-transition);
+}
+.db-filter-tab:hover { border-color: var(--db-navy-softer); color: var(--db-text); }
+.db-filter-tab.is-active { background: var(--db-blue); border-color: var(--db-blue); color: #fff; }
+
+/* ---------- Request list ---------- */
+
+.db-request-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.db-request-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.db-request-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.db-request-card-heading h3 {
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--db-text);
+  margin-bottom: 6px;
+}
+
+.db-request-card-desc {
+  font-size: 0.88rem;
+  color: var(--db-text-muted);
+  line-height: 1.5;
+}
+
+.db-request-card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--db-border);
+}
+
+.db-request-meta-item {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--db-text-muted);
+}
+
+.db-request-meta-date {
+  font-size: 0.8rem;
+  color: var(--db-text-faint);
+  margin-left: auto;
+}
+
+/* ---------- Modal ---------- */
+
+.db-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  z-index: 60;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity var(--db-transition-slow);
+}
+.db-modal-overlay.is-open { display: flex; opacity: 1; }
+
+.db-modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--db-surface);
+  border-radius: var(--db-radius);
+  box-shadow: var(--db-shadow-hover);
+  padding: 28px;
+  transform: translateY(12px);
+  opacity: 0;
+  transition: transform var(--db-transition-slow), opacity var(--db-transition-slow);
+}
+.db-modal-overlay.is-open .db-modal { transform: translateY(0); opacity: 1; }
+
+.db-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.db-modal-header h2 { font-size: 1.2rem; font-weight: 700; color: var(--db-text); }
+
+.db-modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--db-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--db-text-muted);
+  transition: background-color var(--db-transition), color var(--db-transition);
+}
+.db-modal-close:hover { background: var(--db-bg); color: var(--db-text); }
+.db-modal-close svg { width: 18px; height: 18px; }
+
+.db-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.db-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.db-field textarea,
+.db-field select {
+  padding: 11px 14px;
+  border: 1px solid var(--db-border);
+  border-radius: var(--db-radius-sm);
+  font-size: 0.94rem;
+  background: var(--db-surface);
+  font-family: inherit;
+  transition: border-color var(--db-transition), box-shadow var(--db-transition);
+}
+.db-field textarea:focus,
+.db-field select:focus {
+  outline: none;
+  border-color: var(--db-blue);
+  box-shadow: 0 0 0 3px var(--db-blue-soft);
+}
+.db-field textarea { resize: vertical; min-height: 96px; }
+
+.db-field.has-error input,
+.db-field.has-error textarea,
+.db-field.has-error select {
+  border-color: var(--db-danger-ink);
+}
+
+.db-field-error {
+  font-size: 0.78rem;
+  color: var(--db-danger-ink);
+  margin-top: 2px;
 }
 
 /* ---------- Buttons ---------- */
@@ -751,4 +955,10 @@ body {
   .db-welcome { flex-direction: column; }
   .db-topbar-business { display: none; }
   .db-auth-card { padding: 28px 22px; }
+  .db-page-head-row { flex-direction: column; align-items: stretch; }
+  .db-page-head-row .db-btn { width: 100%; }
+  .db-field-row { grid-template-columns: 1fr; }
+  .db-request-card-top { flex-direction: column; }
+  .db-request-meta-date { margin-left: 0; }
+  .db-modal { padding: 22px; }
 }

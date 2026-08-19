@@ -46,12 +46,6 @@ public class DashboardController {
                 "This is where you'll view and manage the services active on your account.");
     }
 
-    @GetMapping("/requests")
-    public String requests(Model model, @AuthenticationPrincipal ClientPrincipal principal) {
-        return placeholder(model, principal, "requests", "Requests",
-                "This is where you'll submit and track change requests for your projects.");
-    }
-
     @GetMapping("/messages")
     public String messages(Model model, @AuthenticationPrincipal ClientPrincipal principal) {
         return placeholder(model, principal, "messages", "Messages",
