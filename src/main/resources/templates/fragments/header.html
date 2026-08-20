@@ -7,6 +7,7 @@
     <a class="logo" href="/" aria-label="Doshi and Yengo Digital — home">
       <span class="logo-mark" aria-hidden="true"></span>
       Doshi and Yengo Digital
+      <span class="logo-cursor" aria-hidden="true">_</span>
     </a>
 
     <nav class="nav-links" aria-label="Primary">
@@ -29,8 +30,6 @@
       <a class="nav-link" href="/about" th:classappend="${activePage == 'about'} ? 'is-active' : ''">About</a>
       <a class="nav-link" href="/contact" th:classappend="${activePage == 'contact'} ? 'is-active' : ''">Contact</a>
       <a class="nav-link" href="/login">Client Login</a>
-
-      <a class="btn btn-primary nav-mobile-cta" href="/contact">Get a Free Quote</a>
     </nav>
 
     <div class="nav-right">
