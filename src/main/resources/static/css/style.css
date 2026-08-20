@@ -253,6 +253,8 @@ h2.section-title, .section-title {
 }
 
 .nav-link {
+  display: flex;
+  align-items: center;
   font-family: var(--font-sans);
   font-size: 0.78rem;
   font-weight: 500;
@@ -281,7 +283,7 @@ h2.section-title, .section-title {
 .nav-link.is-active { color: var(--color-ink); font-weight: 600; }
 .nav-link.is-active::after { transform: scaleX(1); }
 
-.nav-group { position: relative; }
+.nav-group { display: flex; align-items: center; position: relative; }
 
 .nav-submenu {
   position: absolute;
