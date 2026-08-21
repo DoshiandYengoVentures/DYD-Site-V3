@@ -1,14 +1,13 @@
-import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import { authConfig } from "@/lib/auth/auth.config";
+import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-const { auth } = NextAuth(authConfig);
-
-export default auth((req) => {
-  if (!req.auth) {
+export async function middleware(req: NextRequest) {
+  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
-});
+}
 
 export const config = {
   matcher: ["/dashboard/:path*"],
