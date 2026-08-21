@@ -49,15 +49,15 @@ export default async function ContactPage({
 
                 <div className="contact-info-item">
                   <div className="mono-label">Email</div>
-                  <a href="mailto:hello@doshiyengo.digital">hello@doshiyengo.digital</a>
+                  <a href="mailto:doshiandyengoventures@gmail.com">doshiandyengoventures@gmail.com</a>
                 </div>
                 <div className="contact-info-item">
                   <div className="mono-label">Phone</div>
-                  <a href="tel:+10000000000">(000) 000-0000</a>
+                  <a href="tel:+14254770391">(425) 477-0391</a>
                 </div>
                 <div className="contact-info-item">
                   <div className="mono-label">Location</div>
-                  <span>[CITY, STATE]</span>
+                  <span>Sammamish, Washington</span>
                 </div>
                 <div className="contact-info-item">
                   <div className="mono-label">Response Time</div>

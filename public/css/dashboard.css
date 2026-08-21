@@ -438,6 +438,7 @@ body {
 .db-badge-active { background: var(--db-success-bg); color: var(--db-success-ink); }
 .db-badge-progress { background: var(--db-blue-soft); color: var(--db-blue-ink); }
 .db-badge-attention { background: var(--db-warning-bg); color: var(--db-warning-ink); }
+.db-badge-paused { background: var(--db-slate-bg); color: var(--db-slate-ink); }
 
 .db-badge-priority-high { background: var(--db-danger-bg); color: var(--db-danger-ink); }
 .db-badge-priority-medium { background: var(--db-warning-bg); color: var(--db-warning-ink); }

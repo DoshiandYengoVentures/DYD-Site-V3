@@ -35,9 +35,9 @@ export default function Footer() {
           <div>
             <div className="footer-heading">Contact</div>
             <div className="footer-links">
-              <a href="mailto:hello@doshiyengo.digital">hello@doshiyengo.digital</a>
-              <a href="tel:+10000000000">(000) 000-0000</a>
-              <span>[CITY, STATE]</span>
+              <a href="mailto:doshiandyengoventures@gmail.com">doshiandyengoventures@gmail.com</a>
+              <a href="tel:+14254770391">(425) 477-0391</a>
+              <span>Sammamish, Washington</span>
             </div>
           </div>
         </div>
