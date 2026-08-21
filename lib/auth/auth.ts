@@ -1,11 +1,12 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { authConfig, DEMO_USERNAME, DEMO_BUSINESS_NAME } from "./auth.config";
 
-export const DEMO_USERNAME = "demo@doshiyengo.digital";
 export const DEMO_PASSWORD = "Demo1234!";
-export const DEMO_BUSINESS_NAME = "Harbor & Co. Contracting";
+export { DEMO_USERNAME, DEMO_BUSINESS_NAME };
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
   providers: [
     Credentials({
       credentials: { username: {}, password: {} },
@@ -20,21 +21,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
-  pages: { signIn: "/login" },
-  session: { strategy: "jwt" },
-  trustHost: true,
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.businessName = user.name ?? DEMO_BUSINESS_NAME;
-        token.username = user.email ?? DEMO_USERNAME;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      session.user.businessName = token.businessName as string;
-      session.user.username = token.username as string;
-      return session;
-    },
-  },
 });
