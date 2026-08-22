@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { loginAction } from "@/lib/auth/actions";
+import { resendConfirmationAction } from "@/lib/users/actions";
 
 export const metadata: Metadata = {
   title: "Sign In — Doshi and Yengo Digital",
@@ -8,9 +9,9 @@ export const metadata: Metadata = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; logout?: string; signup?: string }>;
+  searchParams: Promise<{ error?: string; logout?: string; signup?: string; confirmed?: string; resend?: string }>;
 }) {
-  const { error, logout, signup } = await searchParams;
+  const { error, logout, signup, confirmed, resend } = await searchParams;
 
   return (
     <>
@@ -28,9 +29,18 @@ export default async function LoginPage({
             <p>Manage your website, services, and messages in one place.</p>
 
             {error === "unconfirmed" && (
-              <div className="db-alert db-alert-error" role="alert">
-                Please confirm your email to activate your account.
-              </div>
+              <>
+                <div className="db-alert db-alert-error" role="alert">
+                  Please confirm your email to activate your account.
+                </div>
+                <form action={resendConfirmationAction} className="db-resend-form">
+                  <div className="db-field">
+                    <label htmlFor="resendEmail">Resend confirmation email</label>
+                    <input type="email" id="resendEmail" name="email" placeholder="you@example.com" required />
+                  </div>
+                  <button type="submit" className="db-btn db-btn-secondary db-btn-block">Resend Confirmation Email</button>
+                </form>
+              </>
             )}
             {error && error !== "unconfirmed" && (
               <div className="db-alert db-alert-error" role="alert">
@@ -45,6 +55,16 @@ export default async function LoginPage({
             {signup === "success" && (
               <div className="db-alert db-alert-info" role="status">
                 Account created! Please confirm your email to activate your account before signing in.
+              </div>
+            )}
+            {confirmed === "success" && (
+              <div className="db-alert db-alert-info" role="status">
+                Your account is confirmed. You can sign in now.
+              </div>
+            )}
+            {resend === "success" && (
+              <div className="db-alert db-alert-info" role="status">
+                If that email needs confirming, we&apos;ve sent a new confirmation link.
               </div>
             )}
 

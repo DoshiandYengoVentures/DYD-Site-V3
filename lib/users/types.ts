@@ -6,5 +6,6 @@ export type User = {
   passwordHash: string;
   emailConfirmed: boolean;
   confirmationToken: string;
+  confirmationTokenExpiresAt: Date;
   createdAt: Date;
 };

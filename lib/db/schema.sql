@@ -28,7 +28,13 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash TEXT NOT NULL,
   email_confirmed BOOLEAN NOT NULL DEFAULT false,
   confirmation_token UUID NOT NULL DEFAULT gen_random_uuid(),
+  confirmation_token_expires_at TIMESTAMPTZ NOT NULL DEFAULT (now() + interval '15 minutes'),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE INDEX IF NOT EXISTS users_email_idx ON users (lower(email));
+
+-- Added for Part 2 (email confirmation). Safe to re-run: adds the column
+-- only if this table already existed from an earlier deployment.
+ALTER TABLE users ADD COLUMN IF NOT EXISTS confirmation_token_expires_at
+  TIMESTAMPTZ NOT NULL DEFAULT (now() + interval '15 minutes');

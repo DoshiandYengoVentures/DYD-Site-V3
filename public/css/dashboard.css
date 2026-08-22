@@ -933,6 +933,8 @@ body {
 .db-alert-error { background: var(--db-danger-bg); color: var(--db-danger-ink); }
 .db-alert-info { background: var(--db-blue-soft); color: var(--db-blue-ink); }
 
+.db-resend-form { margin-bottom: 20px; }
+
 .db-demo-hint {
   margin-top: 22px;
   padding: 14px 16px;
