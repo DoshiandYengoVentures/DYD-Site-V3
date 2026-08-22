@@ -1,17 +1,21 @@
 "use client";
 
 import { useActionState } from "react";
+import { useSearchParams } from "next/navigation";
 import { createRequestAction } from "./actions";
 import { initialCreateRequestState } from "./state";
 import { REQUEST_CATEGORIES, REQUEST_PRIORITIES } from "@/lib/requests/types";
 
 export default function NewRequestModal() {
   const [state, formAction] = useActionState(createRequestAction, initialCreateRequestState);
+  const searchParams = useSearchParams();
   const hasErrors = Object.keys(state.errors).length > 0;
+  const autoOpen = searchParams.get("open") === "1";
+  const defaultCategory = state.values.category || searchParams.get("category") || "";
 
   return (
     <div
-      className={hasErrors ? "db-modal-overlay is-open" : "db-modal-overlay"}
+      className={hasErrors || autoOpen ? "db-modal-overlay is-open" : "db-modal-overlay"}
       data-request-modal-overlay
     >
       <div className="db-modal" role="dialog" aria-modal="true" aria-labelledby="newRequestTitle">
@@ -40,7 +44,7 @@ export default function NewRequestModal() {
           <div className="db-field-row">
             <div className={state.errors.category ? "db-field has-error" : "db-field"}>
               <label htmlFor="requestCategory">Category</label>
-              <select id="requestCategory" name="category" defaultValue={state.values.category} required>
+              <select id="requestCategory" name="category" defaultValue={defaultCategory} required>
                 <option value="">Select a category</option>
                 {REQUEST_CATEGORIES.map((c) => (
                   <option value={c.value} key={c.value}>{c.label}</option>

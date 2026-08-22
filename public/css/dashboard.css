@@ -480,6 +480,41 @@ body {
 }
 .db-panel-link:hover { color: var(--db-blue-ink); }
 
+/* ---------- Detail grid (single-item summary panels) ---------- */
+
+.db-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.db-detail-item {
+  padding-top: 16px;
+  border-top: 1px solid var(--db-border);
+}
+
+.db-detail-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--db-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 6px;
+}
+
+.db-detail-value {
+  font-size: 0.95rem;
+  color: var(--db-text);
+  font-weight: 600;
+}
+
+.db-detail-link {
+  color: var(--db-blue);
+  transition: color var(--db-transition);
+}
+.db-detail-link:hover { color: var(--db-blue-ink); }
+
 .db-notification-item,
 .db-activity-item {
   display: flex;
@@ -959,6 +994,7 @@ body {
   .db-page-head-row { flex-direction: column; align-items: stretch; }
   .db-page-head-row .db-btn { width: 100%; }
   .db-field-row { grid-template-columns: 1fr; }
+  .db-detail-grid { grid-template-columns: 1fr; }
   .db-request-card-top { flex-direction: column; }
   .db-request-meta-date { margin-left: 0; }
   .db-modal { padding: 22px; }
