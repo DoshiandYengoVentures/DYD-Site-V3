@@ -15,3 +15,20 @@ CREATE TABLE IF NOT EXISTS requests (
 );
 
 CREATE INDEX IF NOT EXISTS requests_username_idx ON requests (username);
+
+-- Customer accounts (self-service sign-up). Accounts start unconfirmed and
+-- can't sign in until email_confirmed is set to true (see the confirmation
+-- flow that gates login in lib/auth/auth.ts).
+
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  business_name TEXT NOT NULL,
+  contact_name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  email_confirmed BOOLEAN NOT NULL DEFAULT false,
+  confirmation_token UUID NOT NULL DEFAULT gen_random_uuid(),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS users_email_idx ON users (lower(email));

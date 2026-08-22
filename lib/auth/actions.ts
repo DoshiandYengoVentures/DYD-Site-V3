@@ -1,6 +1,6 @@
 "use server";
 
-import { AuthError } from "next-auth";
+import { AuthError, CredentialsSignin } from "next-auth";
 import { redirect } from "next/navigation";
 import { signIn, signOut } from "@/lib/auth/auth";
 
@@ -12,6 +12,9 @@ export async function loginAction(formData: FormData) {
       redirectTo: "/dashboard",
     });
   } catch (error) {
+    if (error instanceof CredentialsSignin) {
+      redirect(`/login?error=${error.code}`);
+    }
     if (error instanceof AuthError) {
       redirect("/login?error=true");
     }

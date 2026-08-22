@@ -8,9 +8,9 @@ export const metadata: Metadata = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; logout?: string }>;
+  searchParams: Promise<{ error?: string; logout?: string; signup?: string }>;
 }) {
-  const { error, logout } = await searchParams;
+  const { error, logout, signup } = await searchParams;
 
   return (
     <>
@@ -27,7 +27,12 @@ export default async function LoginPage({
             <h1>Sign in to your dashboard</h1>
             <p>Manage your website, services, and messages in one place.</p>
 
-            {error && (
+            {error === "unconfirmed" && (
+              <div className="db-alert db-alert-error" role="alert">
+                Please confirm your email to activate your account.
+              </div>
+            )}
+            {error && error !== "unconfirmed" && (
               <div className="db-alert db-alert-error" role="alert">
                 Incorrect email or password. Please try again.
               </div>
@@ -35,6 +40,11 @@ export default async function LoginPage({
             {logout && (
               <div className="db-alert db-alert-info" role="status">
                 You&apos;ve been signed out.
+              </div>
+            )}
+            {signup === "success" && (
+              <div className="db-alert db-alert-info" role="status">
+                Account created! Please confirm your email to activate your account before signing in.
               </div>
             )}
 
@@ -55,6 +65,10 @@ export default async function LoginPage({
               Email: demo@doshiyengo.digital<br />
               Password: Demo1234!
             </div>
+
+            <p className="db-auth-switch">
+              Don&apos;t have an account? <a href="/signup">Sign up</a>
+            </p>
 
             <a className="db-auth-back" href="/">← Back to the main site</a>
           </div>

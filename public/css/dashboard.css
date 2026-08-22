@@ -955,6 +955,19 @@ body {
 }
 .db-auth-back:hover { color: var(--db-blue); }
 
+.db-auth-switch {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 0.85rem;
+  color: var(--db-text-muted);
+}
+.db-auth-switch a {
+  color: var(--db-blue);
+  font-weight: 600;
+  transition: color var(--db-transition);
+}
+.db-auth-switch a:hover { color: var(--db-blue-ink); }
+
 /* =========================================================
    Responsive
    ========================================================= */
