@@ -6,6 +6,7 @@ type UserRow = {
   business_name: string;
   contact_name: string;
   email: string;
+  phone: string | null;
   password_hash: string;
   email_confirmed: boolean;
   confirmation_token: string;
@@ -19,6 +20,7 @@ function toUser(row: UserRow): User {
     businessName: row.business_name,
     contactName: row.contact_name,
     email: row.email,
+    phone: row.phone,
     passwordHash: row.password_hash,
     emailConfirmed: row.email_confirmed,
     confirmationToken: row.confirmation_token,
@@ -36,7 +38,7 @@ export async function insertUser(data: {
   const result = await sql<UserRow>`
     INSERT INTO users (business_name, contact_name, email, password_hash)
     VALUES (${data.businessName}, ${data.contactName}, ${data.email}, ${data.passwordHash})
-    RETURNING id, business_name, contact_name, email, password_hash, email_confirmed,
+    RETURNING id, business_name, contact_name, email, phone, password_hash, email_confirmed,
       confirmation_token, confirmation_token_expires_at, created_at
   `;
   return toUser(result.rows[0]);
@@ -44,7 +46,7 @@ export async function insertUser(data: {
 
 export async function findByEmail(email: string): Promise<User | null> {
   const result = await sql<UserRow>`
-    SELECT id, business_name, contact_name, email, password_hash, email_confirmed,
+    SELECT id, business_name, contact_name, email, phone, password_hash, email_confirmed,
       confirmation_token, confirmation_token_expires_at, created_at
     FROM users
     WHERE lower(email) = lower(${email})
@@ -54,7 +56,7 @@ export async function findByEmail(email: string): Promise<User | null> {
 
 export async function findByConfirmationToken(token: string): Promise<User | null> {
   const result = await sql<UserRow>`
-    SELECT id, business_name, contact_name, email, password_hash, email_confirmed,
+    SELECT id, business_name, contact_name, email, phone, password_hash, email_confirmed,
       confirmation_token, confirmation_token_expires_at, created_at
     FROM users
     WHERE confirmation_token = ${token}
@@ -72,4 +74,22 @@ export async function updateConfirmationToken(id: string, token: string, expires
     SET confirmation_token = ${token}, confirmation_token_expires_at = ${expiresAt.toISOString()}
     WHERE id = ${id}
   `;
+}
+
+export async function updateProfile(
+  id: string,
+  data: { businessName: string; contactName: string; phone: string | null }
+): Promise<User> {
+  const result = await sql<UserRow>`
+    UPDATE users
+    SET business_name = ${data.businessName}, contact_name = ${data.contactName}, phone = ${data.phone}
+    WHERE id = ${id}
+    RETURNING id, business_name, contact_name, email, phone, password_hash, email_confirmed,
+      confirmation_token, confirmation_token_expires_at, created_at
+  `;
+  return toUser(result.rows[0]);
+}
+
+export async function updatePasswordHash(id: string, passwordHash: string): Promise<void> {
+  await sql`UPDATE users SET password_hash = ${passwordHash} WHERE id = ${id}`;
 }

@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto";
 import * as repository from "./repository";
-import { hashPassword } from "@/lib/auth/password";
+import { hashPassword, verifyPassword } from "@/lib/auth/password";
+import { DEMO_USERNAME } from "@/lib/auth/auth.config";
 import { sendConfirmationEmail } from "@/lib/mail/confirmationEmail";
 import type { User } from "./types";
 
@@ -31,6 +32,53 @@ export async function createUser(data: {
 
 export async function findByEmail(email: string): Promise<User | null> {
   return repository.findByEmail(email);
+}
+
+function isDemoAccount(email: string): boolean {
+  return email.toLowerCase() === DEMO_USERNAME.toLowerCase();
+}
+
+export type UpdateProfileResult = { ok: true; user: User } | { ok: false; error: string };
+
+export async function updateProfile(
+  email: string,
+  data: { businessName: string; contactName: string; phone: string }
+): Promise<UpdateProfileResult> {
+  if (isDemoAccount(email)) {
+    return { ok: false, error: "Profile changes aren't available on the demo account." };
+  }
+
+  const user = await repository.findByEmail(email);
+  if (!user) return { ok: false, error: "Account not found." };
+
+  const updated = await repository.updateProfile(user.id, {
+    businessName: data.businessName,
+    contactName: data.contactName,
+    phone: data.phone || null,
+  });
+  return { ok: true, user: updated };
+}
+
+export type ChangePasswordResult = { ok: true } | { ok: false; error: string };
+
+export async function changePassword(
+  email: string,
+  currentPassword: string,
+  newPassword: string
+): Promise<ChangePasswordResult> {
+  if (isDemoAccount(email)) {
+    return { ok: false, error: "Password changes aren't available on the demo account." };
+  }
+
+  const user = await repository.findByEmail(email);
+  if (!user) return { ok: false, error: "Account not found." };
+
+  const validPassword = await verifyPassword(currentPassword, user.passwordHash);
+  if (!validPassword) return { ok: false, error: "Current password is incorrect." };
+
+  const passwordHash = await hashPassword(newPassword);
+  await repository.updatePasswordHash(user.id, passwordHash);
+  return { ok: true };
 }
 
 export type ConfirmResult =

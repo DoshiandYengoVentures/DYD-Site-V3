@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS users (
   business_name TEXT NOT NULL,
   contact_name TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
+  phone TEXT,
   password_hash TEXT NOT NULL,
   email_confirmed BOOLEAN NOT NULL DEFAULT false,
   confirmation_token UUID NOT NULL DEFAULT gen_random_uuid(),
@@ -38,3 +39,6 @@ CREATE INDEX IF NOT EXISTS users_email_idx ON users (lower(email));
 -- only if this table already existed from an earlier deployment.
 ALTER TABLE users ADD COLUMN IF NOT EXISTS confirmation_token_expires_at
   TIMESTAMPTZ NOT NULL DEFAULT (now() + interval '15 minutes');
+
+-- Added for the Account page's Business Profile section. Safe to re-run.
+ALTER TABLE users ADD COLUMN IF NOT EXISTS phone TEXT;

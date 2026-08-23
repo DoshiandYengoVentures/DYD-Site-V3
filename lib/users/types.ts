@@ -3,6 +3,7 @@ export type User = {
   businessName: string;
   contactName: string;
   email: string;
+  phone: string | null;
   passwordHash: string;
   emailConfirmed: boolean;
   confirmationToken: string;

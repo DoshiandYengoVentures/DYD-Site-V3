@@ -391,6 +391,12 @@ body {
   margin-bottom: 36px;
 }
 
+.db-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 /* ---------- Grids ---------- */
 
 .db-grid {
