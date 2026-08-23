@@ -98,7 +98,7 @@ export default function Sidebar({
           </a>
         </nav>
 
-        <form className="db-nav-signout-form" action={logoutAction}>
+        <form className="db-nav-signout-form" action={logoutAction.bind(null, "/login?logout=true")}>
           <button type="submit" className="db-nav-link">
             <span className="db-nav-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
