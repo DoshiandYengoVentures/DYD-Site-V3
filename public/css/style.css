@@ -215,21 +215,19 @@ h2.section-title, .section-title {
 }
 
 .logo-mark {
-  width: 20px;
+  width: 15px;
   height: 20px;
-  border-radius: 6px;
-  background: var(--color-accent);
-  position: relative;
   flex-shrink: 0;
+  background-color: var(--color-accent);
+  -webkit-mask-image: url("/images/logo.png");
+  mask-image: url("/images/logo.png");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
   transition: transform var(--transition);
-}
-.logo-mark::before {
-  content: "";
-  position: absolute;
-  inset: 5px;
-  border-radius: 2px;
-  background: #fff;
-  opacity: 0.9;
 }
 .logo:hover .logo-mark { transform: scale(1.06); }
 
