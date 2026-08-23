@@ -13,15 +13,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
         {/*
-          beforeInteractive: Next.js inlines these into the server-rendered
-          HTML so they execute on the real browser parse timeline, the same
-          way the original app's <script> tags did. Loading them any other
-          way runs them after hydration, by which point DOMContentLoaded has
-          already fired and main.js/dashboard.js's listeners never trigger.
-          Both scripts no-op harmlessly on pages without their target elements.
+          beforeInteractive: Next.js inlines this into the server-rendered
+          HTML so it executes on the real browser parse timeline, the same
+          way the original app's <script> tag did. Loading it any other way
+          runs it after hydration, by which point DOMContentLoaded has
+          already fired and main.js's listeners never trigger. It no-ops
+          harmlessly on pages without its target elements.
+
+          dashboard.js used to load here too, but its sidebar-toggle and
+          request-modal logic only ran once per hard page load, so it never
+          initialized after a client-side route transition (e.g. the
+          post-login redirect straight into /dashboard). That logic now
+          lives in React state (DashboardShell, RequestModalProvider),
+          which re-initializes correctly on every mount regardless of how
+          the user arrived at the page.
         */}
         <Script src="/js/main.js" strategy="beforeInteractive" />
-        <Script src="/js/dashboard.js" strategy="beforeInteractive" />
       </body>
     </html>
   );

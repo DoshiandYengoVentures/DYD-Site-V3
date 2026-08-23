@@ -11,6 +11,8 @@ import {
   type RequestStatus,
 } from "@/lib/requests/types";
 import NewRequestModal from "./NewRequestModal";
+import NewRequestButton from "./NewRequestButton";
+import { RequestModalProvider } from "./RequestModalProvider";
 
 export const metadata: Metadata = {
   title: "Requests — Doshi and Yengo Digital",
@@ -38,18 +40,13 @@ export default async function RequestsPage({
   const requests = await service.getRequestsForUser(username, filter);
 
   return (
-    <>
+    <RequestModalProvider>
       <div className="db-page-head db-page-head-row">
         <div>
           <h1>Requests</h1>
           <p>Submit a new request and track progress on everything you&apos;ve sent our way.</p>
         </div>
-        <button type="button" className="db-btn db-btn-primary" data-open-request-modal>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" aria-hidden="true">
-            <path d="M12 5v14" /><path d="M5 12h14" />
-          </svg>
-          <span>New Request</span>
-        </button>
+        <NewRequestButton />
       </div>
 
       <div className="db-filter-tabs" role="tablist" aria-label="Filter requests by status">
@@ -107,6 +104,6 @@ export default async function RequestsPage({
       )}
 
       <NewRequestModal />
-    </>
+    </RequestModalProvider>
   );
 }

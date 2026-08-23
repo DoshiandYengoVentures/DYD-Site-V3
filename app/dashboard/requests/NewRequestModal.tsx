@@ -1,27 +1,44 @@
 "use client";
 
-import { useActionState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useActionState, useEffect } from "react";
 import { createRequestAction } from "./actions";
 import { initialCreateRequestState } from "./state";
 import { REQUEST_CATEGORIES, REQUEST_PRIORITIES } from "@/lib/requests/types";
+import { useRequestModal } from "./RequestModalProvider";
 
 export default function NewRequestModal() {
   const [state, formAction] = useActionState(createRequestAction, initialCreateRequestState);
-  const searchParams = useSearchParams();
+  const { isOpen, open, close, defaultCategory: categoryParam } = useRequestModal();
   const hasErrors = Object.keys(state.errors).length > 0;
-  const autoOpen = searchParams.get("open") === "1";
-  const defaultCategory = state.values.category || searchParams.get("category") || "";
+  const defaultCategory = state.values.category || categoryParam;
+
+  // A failed submission re-renders this component with errors but doesn't
+  // go through open() - make sure the modal stays visible so the user can
+  // see what needs fixing.
+  useEffect(() => {
+    if (hasErrors) open();
+  }, [hasErrors, open]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    function handleKeydown(event: KeyboardEvent) {
+      if (event.key === "Escape") close();
+    }
+    document.addEventListener("keydown", handleKeydown);
+    return () => document.removeEventListener("keydown", handleKeydown);
+  }, [isOpen, close]);
 
   return (
     <div
-      className={hasErrors || autoOpen ? "db-modal-overlay is-open" : "db-modal-overlay"}
-      data-request-modal-overlay
+      className={isOpen ? "db-modal-overlay is-open" : "db-modal-overlay"}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) close();
+      }}
     >
       <div className="db-modal" role="dialog" aria-modal="true" aria-labelledby="newRequestTitle">
         <div className="db-modal-header">
           <h2 id="newRequestTitle">New Request</h2>
-          <button type="button" className="db-modal-close" data-close-request-modal aria-label="Close">
+          <button type="button" className="db-modal-close" onClick={close} aria-label="Close">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 6 6 18" /><path d="M6 6l12 12" />
             </svg>
@@ -66,7 +83,7 @@ export default function NewRequestModal() {
           </div>
 
           <div className="db-modal-actions">
-            <button type="button" className="db-btn db-btn-secondary" data-close-request-modal>Cancel</button>
+            <button type="button" className="db-btn db-btn-secondary" onClick={close}>Cancel</button>
             <button type="submit" className="db-btn db-btn-primary">Submit Request</button>
           </div>
         </form>

@@ -7,7 +7,13 @@ function cls(active: boolean) {
   return active ? "db-nav-link is-active" : "db-nav-link";
 }
 
-export default function Sidebar({ businessName }: { businessName: string }) {
+export default function Sidebar({
+  businessName,
+  onClose,
+}: {
+  businessName: string;
+  onClose: () => void;
+}) {
   const pathname = usePathname();
   const is = (href: string) => (href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href));
 
@@ -104,7 +110,7 @@ export default function Sidebar({ businessName }: { businessName: string }) {
         </form>
       </aside>
 
-      <div className="db-sidebar-backdrop"></div>
+      <div className="db-sidebar-backdrop" onClick={onClose}></div>
     </>
   );
 }
