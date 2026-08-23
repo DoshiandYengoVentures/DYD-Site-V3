@@ -9,7 +9,7 @@ function confirmationHtml(contactName: string, confirmUrl: string): string {
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f8fafc; padding: 32px 16px;">
       <div style="max-width: 480px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 32px;">
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 24px;">
-          <span style="display: inline-block; width: 28px; height: 28px; background: #2563eb; border-radius: 8px;"></span>
+          <img src="${getAppUrl()}/images/logo-blue-email.png" width="18" height="24" alt="" style="display: block; width: 18px; height: 24px;" />
           <span style="font-weight: 700; font-size: 15px; color: #0f172a;">Doshi and Yengo Digital</span>
         </div>
 
