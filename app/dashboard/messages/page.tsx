@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
-import DashboardPlaceholder from "@/components/dashboard/DashboardPlaceholder";
+import MessagesClient from "./MessagesClient";
 
 export const metadata: Metadata = { title: "Messages — Doshi and Yengo Digital" };
 
-export default function MessagesPlaceholderPage() {
+export default function MessagesPage() {
   return (
-    <DashboardPlaceholder
-      title="Messages"
-      description="This is where you'll message your Doshi and Yengo Digital team directly."
-    />
+    <>
+      <div className="db-page-head">
+        <h1>Messages</h1>
+        <p>Message our team directly about your account, requests, or anything else.</p>
+      </div>
+
+      <MessagesClient />
+    </>
   );
 }
