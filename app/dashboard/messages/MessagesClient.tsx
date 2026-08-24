@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { messageStore, type Message } from "@/lib/dashboard/messages";
+import { sendMessageAction } from "./actions";
+import type { Message } from "@/lib/dashboard/messages/types";
 
 function formatTimestamp(iso: string): string {
   return new Date(iso).toLocaleString("en-US", {
@@ -12,18 +13,12 @@ function formatTimestamp(iso: string): string {
   });
 }
 
-export default function MessagesClient() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [loaded, setLoaded] = useState(false);
+export default function MessagesClient({ initialMessages }: { initialMessages: Message[] }) {
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [draft, setDraft] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    messageStore.getMessages().then((loadedMessages) => {
-      setMessages(loadedMessages);
-      setLoaded(true);
-    });
-  }, []);
 
   useEffect(() => {
     if (listRef.current) {
@@ -34,10 +29,19 @@ export default function MessagesClient() {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     const body = draft.trim();
-    if (!body) return;
-    const message = await messageStore.sendMessage(body);
-    setMessages((prev) => [...prev, message]);
-    setDraft("");
+    if (!body || sending) return;
+
+    setSending(true);
+    setError(null);
+    try {
+      const message = await sendMessageAction(body);
+      setMessages((prev) => [...prev, message]);
+      setDraft("");
+    } catch {
+      setError("Couldn't send that message. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -50,9 +54,7 @@ export default function MessagesClient() {
   return (
     <div className="db-panel db-messages-panel">
       <div className="db-messages-list" ref={listRef} role="log" aria-live="polite" aria-label="Conversation">
-        {!loaded ? (
-          <p className="db-messages-empty">Loading messages…</p>
-        ) : messages.length === 0 ? (
+        {messages.length === 0 ? (
           <p className="db-messages-empty">No messages yet — send one below to get started.</p>
         ) : (
           messages.map((message) => (
@@ -62,7 +64,7 @@ export default function MessagesClient() {
             >
               <div className="db-message-bubble">{message.body}</div>
               <div className="db-message-meta">
-                <span>{message.senderName}</span>
+                <span>{message.sender === "client" ? "You" : message.senderName}</span>
                 <span aria-hidden="true"> · </span>
                 <span>{formatTimestamp(message.timestamp)}</span>
               </div>
@@ -70,6 +72,12 @@ export default function MessagesClient() {
           ))
         )}
       </div>
+
+      {error && (
+        <div className="db-alert db-alert-error" role="alert" style={{ marginTop: "12px", marginBottom: 0 }}>
+          {error}
+        </div>
+      )}
 
       <form className="db-message-form" onSubmit={handleSubmit}>
         <label htmlFor="messageInput" className="db-visually-hidden">Message</label>
@@ -83,7 +91,9 @@ export default function MessagesClient() {
           rows={2}
           required
         />
-        <button type="submit" className="db-btn db-btn-primary">Send</button>
+        <button type="submit" className="db-btn db-btn-primary" disabled={sending}>
+          {sending ? "Sending…" : "Send"}
+        </button>
       </form>
     </div>
   );

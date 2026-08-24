@@ -34,6 +34,14 @@ export async function findByEmail(email: string): Promise<User | null> {
   return repository.findByEmail(email);
 }
 
+export async function listCustomers(): Promise<User[]> {
+  return repository.findAllCustomers();
+}
+
+export async function countCustomers(): Promise<number> {
+  return repository.countCustomers();
+}
+
 function isDemoAccount(email: string): boolean {
   return email.toLowerCase() === DEMO_USERNAME.toLowerCase();
 }

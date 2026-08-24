@@ -20,12 +20,14 @@ export const authConfig = {
       if (user) {
         token.businessName = user.name ?? DEMO_BUSINESS_NAME;
         token.username = user.email ?? DEMO_USERNAME;
+        token.role = user.role ?? "CUSTOMER";
       }
       return token;
     },
     async session({ session, token }) {
       session.user.businessName = token.businessName as string;
       session.user.username = token.username as string;
+      session.user.role = (token.role as string) ?? "CUSTOMER";
       return session;
     },
   },

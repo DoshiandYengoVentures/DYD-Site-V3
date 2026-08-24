@@ -1,3 +1,5 @@
+export type UserRole = "CUSTOMER" | "OWNER";
+
 export type User = {
   id: string;
   businessName: string;
@@ -5,6 +7,7 @@ export type User = {
   email: string;
   phone: string | null;
   passwordHash: string;
+  role: UserRole;
   emailConfirmed: boolean;
   confirmationToken: string;
   confirmationTokenExpiresAt: Date;

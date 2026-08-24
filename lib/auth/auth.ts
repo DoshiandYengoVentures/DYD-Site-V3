@@ -22,7 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!username || !password) return null;
 
         if (username === DEMO_USERNAME && password === DEMO_PASSWORD) {
-          return { id: DEMO_USERNAME, email: DEMO_USERNAME, name: DEMO_BUSINESS_NAME };
+          return { id: DEMO_USERNAME, email: DEMO_USERNAME, name: DEMO_BUSINESS_NAME, role: "CUSTOMER" };
         }
 
         const user = await userService.findByEmail(username);
@@ -35,7 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new UnconfirmedAccountError();
         }
 
-        return { id: user.id, email: user.email, name: user.businessName };
+        return { id: user.id, email: user.email, name: user.businessName, role: user.role };
       },
     }),
   ],

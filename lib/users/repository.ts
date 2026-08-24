@@ -1,5 +1,5 @@
 import { sql } from "@vercel/postgres";
-import type { User } from "./types";
+import type { User, UserRole } from "./types";
 
 type UserRow = {
   id: string;
@@ -8,6 +8,7 @@ type UserRow = {
   email: string;
   phone: string | null;
   password_hash: string;
+  role: UserRole;
   email_confirmed: boolean;
   confirmation_token: string;
   confirmation_token_expires_at: string;
@@ -22,6 +23,7 @@ function toUser(row: UserRow): User {
     email: row.email,
     phone: row.phone,
     passwordHash: row.password_hash,
+    role: row.role,
     emailConfirmed: row.email_confirmed,
     confirmationToken: row.confirmation_token,
     confirmationTokenExpiresAt: new Date(row.confirmation_token_expires_at),
@@ -38,7 +40,7 @@ export async function insertUser(data: {
   const result = await sql<UserRow>`
     INSERT INTO users (business_name, contact_name, email, password_hash)
     VALUES (${data.businessName}, ${data.contactName}, ${data.email}, ${data.passwordHash})
-    RETURNING id, business_name, contact_name, email, phone, password_hash, email_confirmed,
+    RETURNING id, business_name, contact_name, email, phone, password_hash, role, email_confirmed,
       confirmation_token, confirmation_token_expires_at, created_at
   `;
   return toUser(result.rows[0]);
@@ -46,7 +48,7 @@ export async function insertUser(data: {
 
 export async function findByEmail(email: string): Promise<User | null> {
   const result = await sql<UserRow>`
-    SELECT id, business_name, contact_name, email, phone, password_hash, email_confirmed,
+    SELECT id, business_name, contact_name, email, phone, password_hash, role, email_confirmed,
       confirmation_token, confirmation_token_expires_at, created_at
     FROM users
     WHERE lower(email) = lower(${email})
@@ -56,7 +58,7 @@ export async function findByEmail(email: string): Promise<User | null> {
 
 export async function findByConfirmationToken(token: string): Promise<User | null> {
   const result = await sql<UserRow>`
-    SELECT id, business_name, contact_name, email, phone, password_hash, email_confirmed,
+    SELECT id, business_name, contact_name, email, phone, password_hash, role, email_confirmed,
       confirmation_token, confirmation_token_expires_at, created_at
     FROM users
     WHERE confirmation_token = ${token}
@@ -84,7 +86,7 @@ export async function updateProfile(
     UPDATE users
     SET business_name = ${data.businessName}, contact_name = ${data.contactName}, phone = ${data.phone}
     WHERE id = ${id}
-    RETURNING id, business_name, contact_name, email, phone, password_hash, email_confirmed,
+    RETURNING id, business_name, contact_name, email, phone, password_hash, role, email_confirmed,
       confirmation_token, confirmation_token_expires_at, created_at
   `;
   return toUser(result.rows[0]);
@@ -92,4 +94,20 @@ export async function updateProfile(
 
 export async function updatePasswordHash(id: string, passwordHash: string): Promise<void> {
   await sql`UPDATE users SET password_hash = ${passwordHash} WHERE id = ${id}`;
+}
+
+export async function findAllCustomers(): Promise<User[]> {
+  const result = await sql<UserRow>`
+    SELECT id, business_name, contact_name, email, phone, password_hash, role, email_confirmed,
+      confirmation_token, confirmation_token_expires_at, created_at
+    FROM users
+    WHERE role = 'CUSTOMER'
+    ORDER BY created_at DESC
+  `;
+  return result.rows.map(toUser);
+}
+
+export async function countCustomers(): Promise<number> {
+  const result = await sql<{ count: string }>`SELECT COUNT(*) FROM users WHERE role = 'CUSTOMER'`;
+  return Number(result.rows[0].count);
 }

@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { redirect } from "next/navigation";
+import * as contactService from "@/lib/contact/service";
 import type { ContactFormState } from "./state";
 
 const ContactSchema = z.object({
@@ -41,9 +42,7 @@ export async function submitContact(
     return { submitCount: prevState.submitCount + 1, errors, values };
   }
 
-  console.log(
-    `New contact form submission — name: ${parsed.data.name}, email: ${parsed.data.email}, phone: ${parsed.data.phone}, message: ${parsed.data.message}`
-  );
+  await contactService.submitContactForm(parsed.data);
 
   redirect("/contact?submitted=true");
 }

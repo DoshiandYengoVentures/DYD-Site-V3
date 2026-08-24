@@ -42,3 +42,34 @@ ALTER TABLE users ADD COLUMN IF NOT EXISTS confirmation_token_expires_at
 
 -- Added for the Account page's Business Profile section. Safe to re-run.
 ALTER TABLE users ADD COLUMN IF NOT EXISTS phone TEXT;
+
+-- Added for the Owner (internal admin) dashboard. Every account defaults to
+-- CUSTOMER; the single OWNER account is seeded separately (see
+-- scripts/README or the setup notes — never via the public sign-up flow).
+ALTER TABLE users ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 'CUSTOMER';
+
+-- Messages, shared by the customer dashboard's Messages page and the owner
+-- dashboard's Messages page - the same rows, two read/write surfaces.
+CREATE TABLE IF NOT EXISTS messages (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_email TEXT NOT NULL,
+  sender TEXT NOT NULL,
+  sender_name TEXT NOT NULL,
+  body TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS messages_user_email_idx ON messages (lower(user_email));
+
+-- Public marketing-site contact form submissions. Not tied to a customer
+-- account - anyone can submit one, including non-customers.
+CREATE TABLE IF NOT EXISTS contact_submissions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT,
+  message TEXT NOT NULL,
+  submitted_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS contact_submissions_submitted_at_idx ON contact_submissions (submitted_at DESC);
