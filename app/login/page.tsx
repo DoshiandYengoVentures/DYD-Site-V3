@@ -80,12 +80,6 @@ export default async function LoginPage({
               <button type="submit" className="db-btn db-btn-primary db-btn-block">Sign In</button>
             </form>
 
-            <div className="db-demo-hint">
-              <strong>Demo login</strong><br />
-              Email: demo@doshiyengo.digital<br />
-              Password: Demo1234!
-            </div>
-
             <p className="db-auth-switch">
               Don&apos;t have an account? <a href="/signup">Sign up</a>
             </p>
