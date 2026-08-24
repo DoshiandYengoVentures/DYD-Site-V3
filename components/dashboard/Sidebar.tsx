@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { logoutAction } from "@/lib/auth/actions";
+import MessagesNavBadge from "./MessagesNavBadge";
 
 function cls(active: boolean) {
   return active ? "db-nav-link is-active" : "db-nav-link";
@@ -76,6 +77,7 @@ export default function Sidebar({
               </svg>
             </span>
             <span>Messages</span>
+            <MessagesNavBadge />
           </a>
 
           <a className={cls(is("/dashboard/analytics"))} href="/dashboard/analytics">

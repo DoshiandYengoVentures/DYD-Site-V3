@@ -18,3 +18,11 @@ export async function sendMessageAction(body: string): Promise<Message> {
   const senderName = session.user.businessName || "Client";
   return messageService.sendMessage(email, "client", senderName, trimmed);
 }
+
+export async function getUnreadCountAction(): Promise<number> {
+  const session = await auth();
+  const email = session?.user?.username;
+  if (!email) return 0;
+
+  return messageService.getUnreadCountForUser(email);
+}

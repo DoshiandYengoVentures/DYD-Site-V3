@@ -61,6 +61,11 @@ CREATE TABLE IF NOT EXISTS messages (
 
 CREATE INDEX IF NOT EXISTS messages_user_email_idx ON messages (lower(user_email));
 
+-- Unread state for notification badges. NULL = unread. A message's
+-- recipient is always the other party (sender='client' -> the owner;
+-- sender='team' -> that row's customer), so one column is unambiguous.
+ALTER TABLE messages ADD COLUMN IF NOT EXISTS read_at TIMESTAMPTZ;
+
 -- Public marketing-site contact form submissions. Not tied to a customer
 -- account - anyone can submit one, including non-customers.
 CREATE TABLE IF NOT EXISTS contact_submissions (

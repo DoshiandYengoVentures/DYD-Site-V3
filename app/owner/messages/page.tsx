@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import * as userService from "@/lib/users/service";
 import * as contactService from "@/lib/contact/service";
+import * as messageService from "@/lib/dashboard/messages/service";
 import CustomerThreadsPanel from "./CustomerThreadsPanel";
 
 export const metadata: Metadata = { title: "Messages — Owner Dashboard" };
@@ -10,9 +11,10 @@ function formatDateTime(date: Date): string {
 }
 
 export default async function OwnerMessagesPage() {
-  const [submissions, customers] = await Promise.all([
+  const [submissions, customers, unreadCounts] = await Promise.all([
     contactService.listSubmissions(),
     userService.listCustomers(),
+    messageService.getUnreadCountsByCustomer(),
   ]);
 
   const customerSummaries = customers.map((c) => ({
@@ -52,7 +54,7 @@ export default async function OwnerMessagesPage() {
 
         <div className="ow-panel">
           <div className="ow-panel-title">Customer Message Threads</div>
-          <CustomerThreadsPanel customers={customerSummaries} />
+          <CustomerThreadsPanel customers={customerSummaries} initialUnreadCounts={unreadCounts} />
         </div>
       </div>
     </>

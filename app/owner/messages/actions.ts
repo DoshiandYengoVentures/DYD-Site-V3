@@ -16,9 +16,19 @@ async function requireOwner() {
   }
 }
 
-export async function getCustomerMessagesAction(userEmail: string): Promise<Message[]> {
+/**
+ * Opening a customer's thread is what marks their messages as read - not
+ * just loading the Messages page. Returns how many were just marked read
+ * so the caller can decrement the nav badge locally without a re-fetch.
+ */
+export async function openCustomerThreadAction(
+  userEmail: string
+): Promise<{ messages: Message[]; markedRead: number }> {
   await requireOwner();
-  return messageService.getMessagesForUser(userEmail);
+  const markedRead = await messageService.getUnreadCountForCustomer(userEmail);
+  await messageService.markThreadReadByOwner(userEmail);
+  const messages = await messageService.getMessagesForUser(userEmail);
+  return { messages, markedRead };
 }
 
 export async function sendOwnerReplyAction(userEmail: string, body: string): Promise<Message> {
@@ -28,4 +38,9 @@ export async function sendOwnerReplyAction(userEmail: string, body: string): Pro
     throw new Error("Message cannot be empty.");
   }
   return messageService.sendMessage(userEmail, "team", "Doshi and Yengo Team", trimmed);
+}
+
+export async function getTotalUnreadCountAction(): Promise<number> {
+  await requireOwner();
+  return messageService.getTotalUnreadCount();
 }

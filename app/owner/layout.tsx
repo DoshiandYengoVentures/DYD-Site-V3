@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth/auth";
 import OwnerNav from "@/components/owner/OwnerNav";
+import { UnreadCountProvider } from "@/components/owner/UnreadCountContext";
 
 export default async function OwnerLayout({ children }: { children: React.ReactNode }) {
   // Defense in depth: middleware already gates /owner/* by role, but this
@@ -15,8 +16,10 @@ export default async function OwnerLayout({ children }: { children: React.ReactN
     <>
       <link rel="stylesheet" href="/css/owner.css" />
       <div className="ow-root">
-        <OwnerNav />
-        <main className="ow-content">{children}</main>
+        <UnreadCountProvider>
+          <OwnerNav />
+          <main className="ow-content">{children}</main>
+        </UnreadCountProvider>
       </div>
     </>
   );

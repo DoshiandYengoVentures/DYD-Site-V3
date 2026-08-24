@@ -11,6 +11,9 @@ export default async function MessagesPage() {
   const email = session?.user?.username;
   if (!email) redirect("/login");
 
+  // Opening this page is "opening the thread" for the customer side - there's
+  // only one conversation here, unlike the owner's multi-customer inbox.
+  await messageService.markThreadReadByCustomer(email);
   const messages = await messageService.getMessagesForUser(email);
 
   return (

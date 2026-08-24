@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { getCustomerMessagesAction, sendOwnerReplyAction } from "./actions";
+import { openCustomerThreadAction, sendOwnerReplyAction } from "./actions";
+import NotificationBadge from "@/components/NotificationBadge";
+import { useUnreadCount } from "@/components/owner/UnreadCountContext";
 import type { Message } from "@/lib/dashboard/messages/types";
 
 type CustomerSummary = { email: string; businessName: string; contactName: string };
@@ -10,13 +12,21 @@ function formatTimestamp(iso: string): string {
   return new Date(iso).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
 }
 
-export default function CustomerThreadsPanel({ customers }: { customers: CustomerSummary[] }) {
+export default function CustomerThreadsPanel({
+  customers,
+  initialUnreadCounts,
+}: {
+  customers: CustomerSummary[];
+  initialUnreadCounts: Record<string, number>;
+}) {
   const [search, setSearch] = useState("");
   const [expandedEmail, setExpandedEmail] = useState<string | null>(null);
   const [messagesByEmail, setMessagesByEmail] = useState<Record<string, Message[]>>({});
   const [loadingEmail, setLoadingEmail] = useState<string | null>(null);
   const [draftByEmail, setDraftByEmail] = useState<Record<string, string>>({});
   const [sendingEmail, setSendingEmail] = useState<string | null>(null);
+  const [unreadByEmail, setUnreadByEmail] = useState<Record<string, number>>(initialUnreadCounts);
+  const { decrementBy } = useUnreadCount();
 
   const query = search.trim().toLowerCase();
   const filtered = query
@@ -36,9 +46,13 @@ export default function CustomerThreadsPanel({ customers }: { customers: Custome
     setExpandedEmail(email);
     if (!messagesByEmail[email]) {
       setLoadingEmail(email);
-      const messages = await getCustomerMessagesAction(email);
+      const { messages, markedRead } = await openCustomerThreadAction(email);
       setMessagesByEmail((prev) => ({ ...prev, [email]: messages }));
       setLoadingEmail(null);
+      if (markedRead > 0) {
+        setUnreadByEmail((prev) => ({ ...prev, [email.toLowerCase()]: 0 }));
+        decrementBy(markedRead);
+      }
     }
   }
 
@@ -74,6 +88,7 @@ export default function CustomerThreadsPanel({ customers }: { customers: Custome
           const isOpen = expandedEmail === customer.email;
           const messages = messagesByEmail[customer.email];
           const isLoading = loadingEmail === customer.email;
+          const unreadCount = unreadByEmail[customer.email.toLowerCase()] ?? 0;
 
           return (
             <div className={isOpen ? "ow-customer-row is-open" : "ow-customer-row"} key={customer.email}>
@@ -82,9 +97,12 @@ export default function CustomerThreadsPanel({ customers }: { customers: Custome
                   <span className="ow-customer-row-name">{customer.businessName}</span>
                   <span className="ow-customer-row-email">{customer.contactName} · {customer.email}</span>
                 </div>
-                <svg className="ow-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M9 18l6-6-6-6" />
-                </svg>
+                <div className="ow-customer-row-right">
+                  <NotificationBadge count={unreadCount} />
+                  <svg className="ow-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </div>
               </button>
 
               {isOpen && (

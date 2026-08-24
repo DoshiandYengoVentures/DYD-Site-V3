@@ -2,6 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { logoutAction } from "@/lib/auth/actions";
+import NotificationBadge from "@/components/NotificationBadge";
+import { useUnreadCount } from "./UnreadCountContext";
 
 function cls(active: boolean) {
   return active ? "ow-nav-link is-active" : "ow-nav-link";
@@ -10,6 +12,7 @@ function cls(active: boolean) {
 export default function OwnerNav() {
   const pathname = usePathname();
   const is = (href: string) => (href === "/owner" ? pathname === "/owner" : pathname.startsWith(href));
+  const { totalUnread } = useUnreadCount();
 
   return (
     <header className="ow-topnav">
@@ -25,6 +28,7 @@ export default function OwnerNav() {
         </a>
         <a className={cls(pathname.startsWith("/owner/messages"))} href="/owner/messages">
           <span>Messages</span>
+          <NotificationBadge count={totalUnread} />
         </a>
       </nav>
 
