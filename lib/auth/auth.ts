@@ -17,15 +17,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Credentials({
       credentials: { username: {}, password: {} },
       async authorize(credentials) {
-        const username = (credentials?.username as string | undefined)?.trim().toLowerCase();
+        const identifier = (credentials?.username as string | undefined)?.trim();
         const password = credentials?.password as string | undefined;
-        if (!username || !password) return null;
+        if (!identifier || !password) return null;
 
-        if (username === DEMO_USERNAME && password === DEMO_PASSWORD) {
+        if (identifier.toLowerCase() === DEMO_USERNAME && password === DEMO_PASSWORD) {
           return { id: DEMO_USERNAME, email: DEMO_USERNAME, name: DEMO_BUSINESS_NAME, role: "CUSTOMER" };
         }
 
-        const user = await userService.findByEmail(username);
+        const user = identifier.includes("@")
+          ? await userService.findByEmail(identifier)
+          : await userService.findByPhone(identifier);
         if (!user) return null;
 
         const validPassword = await verifyPassword(password, user.passwordHash);

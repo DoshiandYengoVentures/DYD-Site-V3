@@ -11,6 +11,7 @@ export async function signupAction(prevState: SignupState, formData: FormData): 
     businessName: String(formData.get("businessName") ?? "").trim(),
     contactName: String(formData.get("contactName") ?? "").trim(),
     email: String(formData.get("email") ?? "").trim(),
+    phone: String(formData.get("phone") ?? "").trim(),
   };
   const password = String(formData.get("password") ?? "");
   const confirmPassword = String(formData.get("confirmPassword") ?? "");
@@ -48,6 +49,13 @@ export async function signupAction(prevState: SignupState, formData: FormData): 
     }
   }
 
+  if (values.phone) {
+    const existingPhone = await userService.findByPhone(values.phone);
+    if (existingPhone) {
+      errors.phone = "An account with this phone number already exists.";
+    }
+  }
+
   if (Object.keys(errors).length > 0) {
     return { submitCount: prevState.submitCount + 1, errors, values };
   }
@@ -56,6 +64,7 @@ export async function signupAction(prevState: SignupState, formData: FormData): 
     businessName: values.businessName,
     contactName: values.contactName,
     email: values.email,
+    phone: values.phone || null,
     password,
   });
 

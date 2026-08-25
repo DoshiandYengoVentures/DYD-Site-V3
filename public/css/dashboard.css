@@ -986,6 +986,11 @@ body {
   color: var(--db-text);
 }
 
+.db-field-optional {
+  font-weight: 400;
+  color: var(--db-text-muted);
+}
+
 .db-field input {
   padding: 11px 14px;
   border: 1px solid var(--db-border);

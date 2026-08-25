@@ -11,6 +11,7 @@ export async function createUser(data: {
   businessName: string;
   contactName: string;
   email: string;
+  phone: string | null;
   password: string;
 }): Promise<User> {
   const passwordHash = await hashPassword(data.password);
@@ -18,6 +19,7 @@ export async function createUser(data: {
     businessName: data.businessName,
     contactName: data.contactName,
     email: data.email.trim().toLowerCase(),
+    phone: data.phone,
     passwordHash,
   });
 
@@ -32,6 +34,10 @@ export async function createUser(data: {
 
 export async function findByEmail(email: string): Promise<User | null> {
   return repository.findByEmail(email);
+}
+
+export async function findByPhone(phone: string): Promise<User | null> {
+  return repository.findByPhone(phone);
 }
 
 export async function listCustomers(): Promise<User[]> {

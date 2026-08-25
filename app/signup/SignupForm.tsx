@@ -41,6 +41,21 @@ export default function SignupForm() {
         {state.errors.email && <span className="db-field-error">{state.errors.email}</span>}
       </div>
 
+      <div className={state.errors.phone ? "db-field has-error" : "db-field"}>
+        <label htmlFor="phone">
+          Phone Number <span className="db-field-optional">(optional)</span>
+        </label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          autoComplete="tel"
+          placeholder="(425) 555-0100"
+          defaultValue={state.values.phone}
+        />
+        {state.errors.phone && <span className="db-field-error">{state.errors.phone}</span>}
+      </div>
+
       <div className={state.errors.password ? "db-field has-error" : "db-field"}>
         <label htmlFor="password">Password</label>
         <input type="password" id="password" name="password" autoComplete="new-password" required />
@@ -51,6 +66,11 @@ export default function SignupForm() {
         <label htmlFor="confirmPassword">Confirm Password</label>
         <input type="password" id="confirmPassword" name="confirmPassword" autoComplete="new-password" required />
         {state.errors.confirmPassword && <span className="db-field-error">{state.errors.confirmPassword}</span>}
+      </div>
+
+      <div className="db-alert db-alert-info" role="status">
+        After you create your account, we&apos;ll send a confirmation email to verify your address. You&apos;ll
+        need to confirm it before you can sign in — a phone number just gives us another way to reach you.
       </div>
 
       <button type="submit" className="db-btn db-btn-primary db-btn-block">Create Account</button>

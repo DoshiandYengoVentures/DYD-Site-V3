@@ -70,8 +70,8 @@ export default async function LoginPage({
 
             <form action={loginAction}>
               <div className="db-field">
-                <label htmlFor="username">Email</label>
-                <input type="email" id="username" name="username" autoComplete="username" required autoFocus />
+                <label htmlFor="username">Email or Phone Number</label>
+                <input type="text" id="username" name="username" autoComplete="username" required autoFocus />
               </div>
               <div className="db-field">
                 <label htmlFor="password">Password</label>

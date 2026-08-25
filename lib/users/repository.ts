@@ -35,11 +35,12 @@ export async function insertUser(data: {
   businessName: string;
   contactName: string;
   email: string;
+  phone: string | null;
   passwordHash: string;
 }): Promise<User> {
   const result = await sql<UserRow>`
-    INSERT INTO users (business_name, contact_name, email, password_hash)
-    VALUES (${data.businessName}, ${data.contactName}, ${data.email}, ${data.passwordHash})
+    INSERT INTO users (business_name, contact_name, email, phone, password_hash)
+    VALUES (${data.businessName}, ${data.contactName}, ${data.email}, ${data.phone}, ${data.passwordHash})
     RETURNING id, business_name, contact_name, email, phone, password_hash, role, email_confirmed,
       confirmation_token, confirmation_token_expires_at, created_at
   `;
@@ -52,6 +53,19 @@ export async function findByEmail(email: string): Promise<User | null> {
       confirmation_token, confirmation_token_expires_at, created_at
     FROM users
     WHERE lower(email) = lower(${email})
+  `;
+  return result.rows[0] ? toUser(result.rows[0]) : null;
+}
+
+export async function findByPhone(phone: string): Promise<User | null> {
+  const normalized = phone.replace(/[^0-9]/g, "");
+  if (!normalized) return null;
+
+  const result = await sql<UserRow>`
+    SELECT id, business_name, contact_name, email, phone, password_hash, role, email_confirmed,
+      confirmation_token, confirmation_token_expires_at, created_at
+    FROM users
+    WHERE phone IS NOT NULL AND regexp_replace(phone, '[^0-9]', '', 'g') = ${normalized}
   `;
   return result.rows[0] ? toUser(result.rows[0]) : null;
 }
