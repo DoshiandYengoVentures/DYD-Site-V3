@@ -50,7 +50,7 @@ export default function SignupForm() {
           id="phone"
           name="phone"
           autoComplete="tel"
-          placeholder="(425) 555-0100"
+          placeholder="(000) 000-0000"
           defaultValue={state.values.phone}
         />
         {state.errors.phone && <span className="db-field-error">{state.errors.phone}</span>}
