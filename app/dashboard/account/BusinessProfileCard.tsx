@@ -85,7 +85,7 @@ export default function BusinessProfileCard({
               type="tel"
               id="phone"
               name="phone"
-              placeholder="(425) 555-0100"
+              placeholder="(000) 000-0000"
               defaultValue={state.values.phone}
             />
             {state.errors.phone && <span className="db-field-error">{state.errors.phone}</span>}
